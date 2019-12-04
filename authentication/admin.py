@@ -4,7 +4,8 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
-from .models import User
+from .models import User, Role
+
 
 
 class UserCreationForm(forms.ModelForm):
@@ -73,7 +74,7 @@ class UserChangeForm(forms.ModelForm):
         'is_verified',
         'is_active',
         'is_admin',
-
+        'roles',
          )
 
     def clean_password(self):
@@ -95,7 +96,7 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ('is_admin',)
     fieldsets = (
         (None, {'fields': ('email', 'username', 'password')}),
-        ('Personal info', {'fields': ('first_name', 'last_name','location', 'phone')}),
+        ('Personal info', {'fields': ('first_name', 'last_name', 'roles', 'location', 'phone')}),
         ('Permissions', {'fields': ('is_admin',)}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -115,5 +116,8 @@ admin.site.register(User, UserAdmin)
 # ... and, since we're not using Django's built-in permissions,
 # unregister the Group model from admin.
 admin.site.unregister(Group)
+
+admin.site.register(Role)
+
 
 

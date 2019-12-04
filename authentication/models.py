@@ -30,6 +30,26 @@ class UserManager(BaseUserManager):
          return user
 
 
+class Role(models.Model):
+
+    ADMIN = 1
+    SUPPLIER = 2
+    LOADER = 3
+    RECIPIENT = 4
+    ROLE_CHOICES = (
+        (ADMIN, 'admin'),
+        (LOADER, 'loader'),
+        (SUPPLIER, 'suplier'),
+        (RECIPIENT, 'recipient'),
+    )
+
+    id = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, primary_key=True)
+    def __str__(self):
+        return self.get_id_display()
+
+
+
+
 class User(AbstractBaseUser):
     GENDER = (('m', 'Male'),('f', 'Female'),('o', 'Other'))
 
@@ -47,6 +67,7 @@ class User(AbstractBaseUser):
     is_verified = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
+    roles = models.ManyToManyField(Role)
     
     objects = UserManager()
     USERNAME_FIELD = 'email'
